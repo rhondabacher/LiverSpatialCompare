@@ -3,7 +3,7 @@ library(viridis)
 library(clusterProfiler)
 library(org.Mm.eg.db)
 
-load("tempTry.RData", envir=.GlobalEnv)
+load("dataAndFunctions_generateKeggPlots.RData", envir=.GlobalEnv)
 
 scale01 <- function(x, low = min(x), high = max(x)) {
       x <- (x - low)/(high - low)
