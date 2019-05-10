@@ -10,6 +10,7 @@ ui <- fluidPage(
             tags$div(tags$h4("Choose a Kegg or GO category from the drop-down list below. 
             Also select the adjusted p-value significant threshold for genes to consider. This is applied to both datasets.")),
             tags$br(),
+            tags$div(tags$h4("Only 10 significantly zonated genes in the Kegg category are shown. The ten are the best correlated across datasets."))
             tags$br()     
         )
     ),

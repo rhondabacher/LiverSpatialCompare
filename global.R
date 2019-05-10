@@ -138,8 +138,8 @@ makeCorPlots <- function(inCat, pushLow=0, pushHigh=1, sigUse){
   breaks <- seq(MIN, MAX, length.out=length(heatcols2)+1)
 
             
-  MAT = matrix(c(1,1,1, 5, 1,1,1, 6, 2,3,4, 6), nrow=3, ncol=4, byrow=T)
-  layout(MAT, width=c(.5,.5,.5,1), height=c(.2,.5,1))
+  MAT = matrix(c(1,1,1, 2,2, 1,1,1, 3,3, 4,5,6,7,8, 9,10,11,12,13), nrow=4, ncol=5, byrow=T)
+  layout(MAT, width=c(.5,.5,.5,.5,.5), height=c(.2,1,.5,.5))
 
 
   TOP <- round(max(dens2$y, dens3$y),1)
@@ -155,12 +155,6 @@ makeCorPlots <- function(inCat, pushLow=0, pushHigh=1, sigUse){
   legend('topleft', c("All Genes", "KEGG Genes", "Zonated Genes"), 
                 fill=c(alpha("gray", .2),alpha("maroon1", .4),alpha("maroon3", .7)), 
                 bty = "n")
-                
-                
-  allGenesToPlot <- names(c(sort(getCorr[sub3], decreasing=T)[1:3]))
-  quickScatter(allGenesToPlot)
-
-
 
   par(mar=c(1.5,2,1,5))
     image(z = matrix(breaks, ncol = 1), col = heatcols2, 
@@ -178,6 +172,12 @@ makeCorPlots <- function(inCat, pushLow=0, pushHigh=1, sigUse){
     axis(4, at = round(seq(0, 1, length.out = length(useOrder)),2), labels = useOrder, 
            las=1, cex.axis=1)
     axis(1, at=c(0,1), label=c("PC", "PP"), cex.axis=2, tick = F)
+  
+  
+  par(mar=c(5,5,2,1))
+    MIN <- min(10, length(sub3))
+    allGenesToPlot <- names(c(sort(getCorr[sub3], decreasing=T)[1:MIN]))
+    quickScatter(allGenesToPlot)
   }
 
 }
