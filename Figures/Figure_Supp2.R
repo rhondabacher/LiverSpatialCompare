@@ -1,6 +1,6 @@
 # For any Kegg category, check correlation and heatmap:
 
-setwd("/Volumes/rbacher/COLLAB/MORTEN_SEIRUP/TAKE_OVER/ANALYSIS/")
+setwd("LiverSpatialCompare")
 
 ## Load in datasets:
 load("RDATA/dataReady_bothData_genesMapped.RData")
