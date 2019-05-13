@@ -1,6 +1,6 @@
 # For any Kegg category, check correlation and heatmap:
 
-setwd("/Volumes/rbacher/COLLAB/MORTEN_SEIRUP/TAKE_OVER/ANALYSIS/")
+setwd("LiverSpatialCompare")
 
 ## Load in datasets:
 load("RDATA/dataReady_bothData_genesMapped.RData")
@@ -149,7 +149,7 @@ makeCorPlots <- function(KEGG, NAME, catGenes, pushLow=0, pushHigh=1){
   
   TOP <- round(max(dens2$y, dens3$y),1)
 
-  data.norm.order.rmout <- log(PushOL(data.norm.order, qt1 = .02, qt2 = 0.98)+1)
+  data.norm.order.rmout <- log(PushOL(data.norm.order, qt1 = 0, qt2 = 0.97)+1)
 
   top.res.fitted <- t(apply(log(data.norm.order.rmout[sub3,]+1), 1, function(x) {
     FIT = smooth.spline(1:ncol(data.norm.order.rmout),x, 
@@ -197,7 +197,8 @@ makeCorPlots <- function(KEGG, NAME, catGenes, pushLow=0, pushHigh=1){
                 bty = "n")
                 
                 
-  allGenesToPlot <- names(c(sort(getCorr[sub3], decreasing=T)[1:8]))
+  allGenesToPlot <- names(c(sort(getCorr[sub3], decreasing=T)[1:4], 
+          sort(getCorr[sub3])[4:1]))
   quickScatter(allGenesToPlot)
 
 
@@ -221,6 +222,7 @@ par(mar=c(4,2,1,5))
 
 
 }
+
 
 # Which genes are significant:
 sig.h <- names(which(layerStatsPvalue[,2] < .1))
@@ -255,7 +257,7 @@ firstPlot <- function(MAIN, TOP) {
 
 
 grep("amino", kk$Description)
-pdf("PLOTS/FORFIGS/subplot1_forSupplementalFig1.pdf", height=6, width=15)
+pdf("PLOTS/subplot1_forSupplementalFig1.pdf", height=6, width=15)
 subcat <- kk@result[14,]
 catGenes <- strsplit(subcat$geneID, "/", fixed = T)[[1]]
 makeCorPlots(subcat$ID, subcat$Description, catGenes, .1, .90)
@@ -263,19 +265,19 @@ dev.off()
 
 grep("lipo", kk$Description)
 grep("P450", kk$Description)
-pdf("PLOTS/FORFIGS/subplot2_forSupplementalFig1.pdf", height=6, width=15)
+pdf("PLOTS/subplot2_forSupplementalFig1.pdf", height=6, width=15)
 subcat <- kk@result[5,]
 catGenes <- strsplit(subcat$geneID, "/", fixed = T)[[1]]
 makeCorPlots(subcat$ID, subcat$Description, catGenes, .05, .90)
 dev.off()
 
-pdf("PLOTS/FORFIGS/subplot3_forSupplementalFig1.pdf", height=6, width=15)
+pdf("PLOTS/subplot3_forSupplementalFig1.pdf", height=6, width=15)
 subcat <- kk@result[2,]
 catGenes <- strsplit(subcat$geneID, "/", fixed = T)[[1]]
 makeCorPlots(subcat$ID, subcat$Description, catGenes, .1, .90)
 dev.off()
 
-pdf("PLOTS/FORFIGS/subplot4_forSupplementalFig1.pdf", height=6, width=15)
+pdf("PLOTS/subplot4_forSupplementalFig1.pdf", height=6, width=15)
 subcat <- kk@result[43,]
 catGenes <- strsplit(subcat$geneID, "/", fixed = T)[[1]]
 makeCorPlots(subcat$ID, subcat$Description, catGenes, .1, .95)
