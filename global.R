@@ -79,12 +79,10 @@ quickScatter <- function(allGenes) {
     axis(2, at=seq(0,1, by=.5), label=seq(0,1, by=.5), lwd=2,cex.axis=1.5)
     axis(1, at=1:9, label=1:9, cex.axis=1.5, lwd=2)
   
-    FIT = smooth.spline(1:9, rescaleY.morten.means,
-                        control.spar=list(low=.2, high=.5))
+    FIT = smooth.spline(1:9, rescaleY.morten.means, df=4)
     lines(FIT$x, FIT$y, lwd=3, col="#fc8d59")
   
-    FIT = smooth.spline(1:9, rescaleY.halpern.means, 
-                        control.spar=list(low=.2, high=.5))
+    FIT = smooth.spline(1:9, rescaleY.halpern.means, df=4)
     lines(FIT$x, FIT$y, lwd=3, col="#91bfdb")
   
     points(1:9, rescaleY.morten.means, col="#fc8d59", pch=95, cex=3)

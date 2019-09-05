@@ -6,7 +6,7 @@ load("RDATA/dataReady_bothData_genesMapped.RData")
 load("RDATA/analysis_WaveCrest_Morten.RData")
 
 data.norm.order <- data.norm[,wc.order]
-
+ 
 allGenes <- c("Cyp1a2", "Cyp2e1", "Oat", "Rgn", "Aldh3a2", "Tbx3", "Cyp2f2", "Hal")
 
 
@@ -17,11 +17,11 @@ layerSplit <- split(1:ncol(data.norm.order), cut(seq_along(1:ncol(data.norm.orde
 layerSplit <- do.call(c,sapply(1:9, function(x) rep(x, length(layerSplit[[x]]))))
 
 layerMeans.morten <- t(apply(data.norm.order, 1, function(x) {
-  return(tapply(x, layerSplit, mean))
+  return(tapply(x, layerSplit, median))
 }))
 
 
-pdf(paste0("PLOTS/morten_geneExp_Ordered_scatterFit_",i,"_overlayHalpern_ALL_Fig2.pdf"), height=4, width=10)  
+pdf(paste0("PLOTS/morten_geneExp_Ordered_scatterFit_overlayHalpern_ALL_Fig2.pdf"), height=4, width=10)  
 par(mfrow=c(2,4),  mar=c(5,5,2,1))
 for(geneX in allGenes) {
 
@@ -37,12 +37,10 @@ for(geneX in allGenes) {
   axis(2, at=seq(0,1, by=.5), label=seq(0,1, by=.5), lwd=2,cex.axis=1.5)
   axis(1, at=1:9, label=1:9, cex.axis=1.5, lwd=2)
   
-  FIT = smooth.spline(1:9, rescaleY.morten.means,
-                      control.spar=list(low=.2, high=.5))
+  FIT = smooth.spline(1:9, rescaleY.morten.means, df=4)
   lines(FIT$x, FIT$y, lwd=3, col="#fc8d59")
   
-  FIT = smooth.spline(1:9, rescaleY.halpern.means, 
-                      control.spar=list(low=.2, high=.5))
+  FIT = smooth.spline(1:9, rescaleY.halpern.means, df=4)
   lines(FIT$x, FIT$y, lwd=3, col="#91bfdb")
   
   points(1:9, rescaleY.morten.means, col="#fc8d59", pch=95, cex=3)
@@ -50,9 +48,9 @@ for(geneX in allGenes) {
   
   # Decide where to put legenes
   if (rescaleY.morten.means[1] > rescaleY.morten.means[9]){
-    legend('topright', c("Full-length", "UMI"), col=c("#fc8d59", "#91bfdb"), lty=1, lwd=3)
+    legend('topright', c("Smart-seq", "MARS-seq"), col=c("#fc8d59", "#91bfdb"), lty=1, lwd=3)
   } else {
-    legend('bottomright', c("Full-length", "UMI"), col=c("#fc8d59", "#91bfdb"), lty=1, lwd=3)
+    legend('bottomright', c("Smart-seq", "MARS-seq"), col=c("#fc8d59", "#91bfdb"), lty=1, lwd=3)
   }
 
 }

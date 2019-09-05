@@ -1,7 +1,7 @@
 # For any Kegg category, check correlation and heatmap:
 
 setwd("LiverSpatialCompare")
-
+ 
 ## Load in datasets:
 load("RDATA/dataReady_bothData_genesMapped.RData")
 rownames(layerMeans) <- gsub(" ", "", rownames(layerMeans), fixed=TRUE)
@@ -14,7 +14,7 @@ layerSplit <- split(1:ncol(data.norm.order), cut(seq_along(1:ncol(data.norm.orde
 layerSplit <- do.call(c,sapply(1:9, function(x) rep(x, length(layerSplit[[x]]))))
 
 layerMeans.morten <- t(apply(data.norm.order, 1, function(x) {
-  return(tapply(x, layerSplit, mean))
+  return(tapply(x, layerSplit, median))
 }))
 
 scale01 <- function(x, low = min(x), high = max(x)) {
@@ -112,12 +112,10 @@ quickScatter <- function(allGenes) {
     axis(2, at=seq(0,1, by=.5), label=seq(0,1, by=.5), lwd=2,cex.axis=1.5)
     axis(1, at=1:9, label=1:9, cex.axis=1.5, lwd=2)
   
-    FIT = smooth.spline(1:9, rescaleY.morten.means,
-                        control.spar=list(low=.2, high=.5))
+    FIT = smooth.spline(1:9, rescaleY.morten.means, df=4)
     lines(FIT$x, FIT$y, lwd=3, col="#fc8d59")
   
-    FIT = smooth.spline(1:9, rescaleY.halpern.means, 
-                        control.spar=list(low=.2, high=.5))
+    FIT = smooth.spline(1:9, rescaleY.halpern.means, df=4)
     lines(FIT$x, FIT$y, lwd=3, col="#91bfdb")
   
     points(1:9, rescaleY.morten.means, col="#fc8d59", pch=95, cex=3)
@@ -125,9 +123,9 @@ quickScatter <- function(allGenes) {
   
     # Decide where to put legenes
     if (rescaleY.morten.means[1] > rescaleY.morten.means[9]){
-      legend('topright', c("Full-length", "UMI"), col=c("#fc8d59", "#91bfdb"), lty=1, lwd=3)
+      legend('topright', c("Smart-seq", "MARS-seq"), col=c("#fc8d59", "#91bfdb"), lty=1, lwd=3)
     } else {
-      legend('bottomright', c("Full-length", "UMI"), col=c("#fc8d59", "#91bfdb"), lty=1, lwd=3)
+      legend('bottomright', c("Smart-seq", "MARS-seq"), col=c("#fc8d59", "#91bfdb"), lty=1, lwd=3)
     }
 
   }
@@ -152,8 +150,7 @@ makeCorPlots <- function(KEGG, NAME, catGenes, pushLow=0, pushHigh=1){
   data.norm.order.rmout <- log(PushOL(data.norm.order, qt1 = .02, qt2 = 0.98)+1)
 
   top.res.fitted <- t(apply(log(data.norm.order.rmout[sub3,]+1), 1, function(x) {
-    FIT = smooth.spline(1:ncol(data.norm.order.rmout),x, 
-                        control.spar=list(low=.6, high=.7))
+    FIT = smooth.spline(1:ncol(data.norm.order.rmout),x, df=4)
     return(FIT$y)
   
   }))
@@ -258,7 +255,7 @@ grep("amino", kk$Description)
 pdf("PLOTS/FORFIGS/subplot1_forSupplementalFig1.pdf", height=6, width=15)
 subcat <- kk@result[14,]
 catGenes <- strsplit(subcat$geneID, "/", fixed = T)[[1]]
-makeCorPlots(subcat$ID, subcat$Description, catGenes, .1, .90)
+makeCorPlots(subcat$ID, subcat$Description, catGenes, .02, .98)
 dev.off()
 
 grep("lipo", kk$Description)
@@ -266,18 +263,13 @@ grep("P450", kk$Description)
 pdf("PLOTS/FORFIGS/subplot2_forSupplementalFig1.pdf", height=6, width=15)
 subcat <- kk@result[5,]
 catGenes <- strsplit(subcat$geneID, "/", fixed = T)[[1]]
-makeCorPlots(subcat$ID, subcat$Description, catGenes, .05, .90)
+makeCorPlots(subcat$ID, subcat$Description, catGenes, .02, .98)
 dev.off()
 
 pdf("PLOTS/FORFIGS/subplot3_forSupplementalFig1.pdf", height=6, width=15)
 subcat <- kk@result[2,]
 catGenes <- strsplit(subcat$geneID, "/", fixed = T)[[1]]
-makeCorPlots(subcat$ID, subcat$Description, catGenes, .1, .90)
+makeCorPlots(subcat$ID, subcat$Description, catGenes, .02, .98)
 dev.off()
 
-pdf("PLOTS/FORFIGS/subplot4_forSupplementalFig1.pdf", height=6, width=15)
-subcat <- kk@result[43,]
-catGenes <- strsplit(subcat$geneID, "/", fixed = T)[[1]]
-makeCorPlots(subcat$ID, subcat$Description, catGenes, .1, .95)
-dev.off()
 

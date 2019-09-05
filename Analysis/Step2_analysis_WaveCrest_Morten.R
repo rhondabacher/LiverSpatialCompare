@@ -98,35 +98,46 @@ for(i in 1:length(SIG)) {
 dev.off()
 
 
+
 # Since poly = 1, we are just fitting straight lines.
-fitall.slopes <- sapply(1:length(SIG),function(j){
-  tt=lm(data.norm.scale[SIG[j],wc.order]~poly(1:ncol(data.norm.scale),1))
+fitall.slopes <- sapply(1:nrow(data.norm.scale),function(j){
+  tt=lm(data.norm.scale[j,wc.order]~poly(1:ncol(data.norm.scale),1))
   t2=summary(tt)$coefficients[2,1]  
   return(t2)
 })
-names(fitall.slopes) <- SIG
+names(fitall.slopes) <- rownames(data.norm.scale)
+
+fitall.std.error <- sapply(1:nrow(data.norm.scale),function(j){
+  tt=lm(data.norm.scale[j,wc.order]~poly(1:ncol(data.norm.scale),1))
+  t2=summary(tt)$coefficients[2,2]  
+  return(t2)
+})
+names(fitall.std.error) <- rownames(data.norm.scale)
 
 
-sum(fitall.slopes < 0)
+sum(fitall.slopes > 0)
 
+Genes <- rownames(data.norm.scale)
 done.data = data.frame(
-                       Gene = SIG,
-                       MSE = round(fitall.log.mse[SIG],2),
-                       'FDR-adjusted-pvalue' = (adjusted.pvals[SIG]))
-
-done.data <- done.data[order(done.data$MSE),]
-done.data$Axis <- "None"
-done.data$Axis[which(fitall.slopes[SIG] < 0)] <- "PV"
-done.data$Axis[which(fitall.slopes[SIG] >= 0)] <- "PP"
-
+                       Gene = Genes,
+                       MSE = round(fitall.log.mse[Genes],2),
+                       Slope = fitall.slopes[Genes],
+                       'Std Error' = fitall.std.error[Genes],
+                       pvalue = fitall.pvals[Genes],
+                       'FDR adjusted pvalue' = adjusted.pvals[Genes])
 head(done.data)
+done.data$ZonationAxis <- "NotSignificant"
+
+done.data$ZonationAxis[which(done.data$FDR.adjusted.pvalue < .05 & done.data$Slope < 0)] <- "PV"
+done.data$ZonationAxis[which(done.data$FDR.adjusted.pvalue < .05 & done.data$Slope >= 0)] <- "PP"
+
+
 write.csv(done.data, 
-          file="OUT/Summary_SignificantGenes_Morten_GeneData.csv")
-
-
-
+          file="OUT/SupplementaryFile1.csv", row.names=F)
 
 save.image("RDATA/analysis_WaveCrest_Morten.RData")
 
+
+write.csv(data.norm[,wc.order], "OUT/normalized_WaveCrestOrder.csv")
 
 

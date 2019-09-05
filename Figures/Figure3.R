@@ -4,6 +4,8 @@ setwd("LiverSpatialCompare")
 
 ## Load in datasets:
 load("RDATA/dataReady_bothData_genesMapped.RData")
+rownames(layerMeans) <- gsub(" ", "", rownames(layerMeans), fixed=TRUE)
+
 load("RDATA/analysis_WaveCrest_Morten.RData")
 
 data.norm.order <- data.norm[,wc.order]
@@ -13,10 +15,10 @@ layerSplit <- split(1:ncol(data.norm.order), cut(seq_along(1:ncol(data.norm.orde
 layerSplit <- do.call(c,sapply(1:9, function(x) rep(x, length(layerSplit[[x]]))))
 
 layerMeans.morten <- t(apply(data.norm.order, 1, function(x) {
-  return(tapply(x, layerSplit, mean))
+  return(tapply(x, layerSplit, median))
 }))
 
-
+ 
 ## Calculate the correlation of gene expression across the 9 layers:
 getCorr <- c()
 for(i in 1:nrow(geneSet)) {
@@ -161,8 +163,7 @@ dev.off()
 data.norm.order.rmout <- log(data.norm.order+1)
 
 top.res.fitted <- t(apply(log(data.norm.order.rmout[sig.genes,]+1), 1, function(x) {
-  FIT = smooth.spline(1:ncol(data.norm.order.rmout),x, 
-                      control.spar=list(low=.6, high=.7))
+  FIT = smooth.spline(1:ncol(data.norm.order.rmout),x, df=4)
   return(FIT$y)
   
 }))

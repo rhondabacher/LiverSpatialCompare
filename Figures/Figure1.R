@@ -35,14 +35,16 @@ mean(detect.morten) * length(useMorten.genes)
 library(yarrr)
 
 pdf("PLOTS/detectionRate_compareData_Fig1.pdf", height=6, width=5)
-toPlot <- data.frame(Detection = c(detect.halpern, detect.morten), Data = c(rep("UMI",ncol(halpernUMI.norm)), rep("Full-length", ncol(data.norm))))
+toPlot <- data.frame(Detection = c(detect.halpern, detect.morten), 
+      Data = c(rep("MARS-seq",ncol(halpernUMI.norm)), rep("Smart-seq", ncol(data.norm))))
+toPlot$Data <- factor(toPlot$Data,  levels = c("Smart-seq", "MARS-seq"))
 
 par(mar=c(3,5,1,1), mgp=c(3,1,0))
 yarrr::pirateplot(formula = Detection ~ Data, 
                   data = toPlot, ylim=c(0,.5), point.o = .6, inf.f.o=.5,
                   main = "", yaxt='n', inf.method='iqr',
                   xlab = "", pal=c("#fc8d59", "#91bfdb"),
-                  ylab = "Detection Rate", cex.lab=2, cex.axis=2, cex.names=2)
+                  ylab = "Detection Fraction (per cell)", cex.lab=2, cex.axis=2, cex.names=2)
 axis(2, at=seq(0,.6, by=.1), cex.axis=2)
 dev.off()
 
@@ -65,7 +67,7 @@ library(ggplot2)
 qq <- ggplot(alldata, aes(x = diff_detect, y = diff_logMean)) + 
   geom_point(color='gray40', size=.1) +
   stat_smooth(method="lm", size=1, color="black")  +
-  labs(title="", y="Log2 Fold Change", x="Difference in detection rate") + 
+  labs(title="", y="Log2 Fold Change", x="Difference in detection fraction (per gene)") + 
       theme_bw()  + 
       theme(panel.border = element_blank(), panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
@@ -90,5 +92,5 @@ pdf("PLOTS/detectionRat_vs_Expr_compareDatasets_Fig1.pdf", height=6, width=6)
 ggExtra::ggMarginal(qq, type = "histogram", color='black', size=10,
       xparams = list(fill='gray30'), yparams = list(fill='gray30'))
 dev.off()
-
+ 
 

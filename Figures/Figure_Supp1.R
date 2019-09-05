@@ -50,18 +50,18 @@ lines(density(diffDetect.pos$percentage_gene_gc_content), col="gray40", lwd=2)
 lines(density(diffMean.neg$percentage_gene_gc_content), col="cadetblue3", lwd=2)
 lines(density(diffMean.pos$percentage_gene_gc_content), col="gray40", lwd=2)
 legend(20,.099, title="Genes with higher \n detection or mean in: ", 
-            c("Full-length Data", "UMI Data"), bty='n', xjust=0,
+            c("Smart-seq Data", "MARS-seq Data"), bty='n', xjust=0,
             lwd=2, col=c("gray40", "cadetblue3"), cex=.5)
-
-plot(density(log2(diffDetect.neg$transcript_length)), ylim=c(0,.6),
+ 
+plot(density(log(diffDetect.neg$transcript_length)), ylim=c(0,.6),
       lwd=1.5, xlab= "log2 Gene Length", ylab= "Density", main="", xlim=c(3, 12),
       cex.lab=1.5, cex.axis=2, pch=20, col="cadetblue3", bty='n', xaxt='n', yaxt='n')
 axis(1, at=seq(3,12, by=2), cex.axis=1.3)
 axis(2, at=seq(0,.6, by=.2), cex.axis=1.3)
-lines(density(log2(diffDetect.pos$transcript_length)), col="gray40", lwd=2)
-lines(density(log2(diffMean.neg$transcript_length)), col="cadetblue3", lwd=2)
-lines(density(log2(diffMean.pos$transcript_length)), col="gray40", lwd=2)
+lines(density(log(diffDetect.pos$transcript_length)), col="gray40", lwd=2)
+lines(density(log(diffMean.neg$transcript_length)), col="cadetblue3", lwd=2)
+lines(density(log(diffMean.pos$transcript_length)), col="gray40", lwd=2)
 legend(7,.58, title="Genes with higher \n detection or mean in: ", 
-            c("Full-length Data", "UMI Data"), bty='n', xjust=0,
+            c("Smart-seq Data", "MARS-seq Data"), bty='n', xjust=0,
             lwd=2, col=c("gray40", "cadetblue3"), cex=.5)
 dev.off()

@@ -13,7 +13,7 @@ layerSplit <- split(1:ncol(data.norm.order), cut(seq_along(1:ncol(data.norm.orde
 layerSplit <- do.call(c,sapply(1:9, function(x) rep(x, length(layerSplit[[x]]))))
 
 layerMeans.morten <- t(apply(data.norm.order, 1, function(x) {
-  return(tapply(x, layerSplit, mean))
+  return(tapply(x, layerSplit, median))
 }))
 scale01 <- function(x, low = min(x), high = max(x)) {
       x <- (x - low)/(high - low)
@@ -86,22 +86,18 @@ usekegg <- allKK[1,]
 
 catGenes <- strsplit(usekegg$geneID, "/", fixed = T)
 
-data.norm.order.rmout <- log(PushOL(data.norm.order, qt1 = 0, qt2 = 0.97)+1)
+data.norm.order.rmout <- log(PushOL(data.norm.order, qt1 = .02, qt2 = 0.98)+1)
 
 top.res.fitted <- t(apply(data.norm.order.rmout, 1, function(x) {
-  FIT = smooth.spline(1:ncol(data.norm.order.rmout),x, 
-                      control.spar=list(low=.6, high=.7))
+  FIT = smooth.spline(1:ncol(data.norm.order.rmout),x, df=4)
   return(FIT$y)
 
 }))
 
 top.res.fitted <- top.res.fitted[which(rowSums(top.res.fitted) > 0),]
 
-save(getCorr, all.genes.map, layerMeans, layerSplit, layerMeans.morten, layerStatsPvalue, adjusted.pvals,
-   all.genes.map, geneSet, top.res.fitted, allKK, allKEGG, file="tempTry.RData")
 
-
-
-
-save.image("RDATA/dataAndFunctions_generateKeggPlots.RData")
+save(adjusted.pvals, all.genes.map, allKEGG, allKK, geneSet, 
+      getCorr, layerMeans, layerMeans.morten, layerSplit, 
+      layerStatsPvalue, top.res.fitted, file="dataAndFunctions_generateKeggPlots.RData")
 

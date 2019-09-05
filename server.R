@@ -10,7 +10,7 @@ server <- function(input, output, session) {
    
    
     plotInput <- reactive({
-        makeCorPlots(input$inputCat, .1, .90, input$sigThresh)
+        makeCorPlots(input$inputCat, .02, .98, input$sigThresh)
     })
   
   
