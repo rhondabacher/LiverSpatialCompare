@@ -1,4 +1,4 @@
-setwd("LiverSpatialCompare")
+setwd("scSpatialReconstructCompare-Paper")
 
 ## Genes with zero expression in either dataset
 

@@ -1,4 +1,4 @@
-setwd("LiverSpatialCompare")
+setwd("scSpatialReconstructCompare-Paper")
 
 ## We want to compare datasets, but not all the same genes are annotated. Let's try to match them up here:
 

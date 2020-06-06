@@ -1,6 +1,6 @@
 # Individual genes plots that were stained by Morten
 
-setwd("/Volumes/rbacher/COLLAB/MORTEN_SEIRUP/TAKE_OVER/ANALYSIS/")
+setwd("scSpatialReconstructCompare-Paper")
 
 load("RDATA/dataReady_bothData_genesMapped.RData")
 load("RDATA/analysis_WaveCrest_Morten.RData")

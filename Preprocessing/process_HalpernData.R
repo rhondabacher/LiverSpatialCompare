@@ -1,4 +1,4 @@
-setwd("LiverSpatialCompare")
+setwd("scSpatialReconstructCompare-Paper")
 
 #########
 ## Load and process all Halpern data, downloaded from supplement.

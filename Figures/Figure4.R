@@ -1,4 +1,4 @@
-setwd("LiverSpatialCompare")
+setwd("scSpatialReconstructCompare-Paper")
 
 # Comparing expression over the spatial axis
 

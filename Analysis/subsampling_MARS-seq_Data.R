@@ -1,4 +1,4 @@
-setwd("LiverSpatialCompare")
+setwd("scSpatialReconstructCompare-Paper")
 
 
 load("RDATA/dataReady_HalpernPaper.RData")

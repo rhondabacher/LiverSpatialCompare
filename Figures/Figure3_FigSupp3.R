@@ -1,4 +1,4 @@
-setwd("LiverSpatialCompare")
+setwd("scSpatialReconstructCompare-Paper")
 
 # Rereate plots from Halperns figures of non-monotonic genes:
 

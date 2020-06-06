@@ -1,4 +1,4 @@
-setwd("LiverSpatialCompare")
+setwd("scSpatialReconstructCompare-Paper")
 
 #########
 ## Load and process tabular muris data, downloaded from figshare.

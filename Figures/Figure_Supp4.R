@@ -1,6 +1,6 @@
 # For any Kegg category, check correlation and heatmap:
 
-setwd("LiverSpatialCompare")
+setwd("scSpatialReconstructCompare-Paper")
  
 ## Load in datasets:
 load("RDATA/dataReady_bothData_genesMapped.RData")

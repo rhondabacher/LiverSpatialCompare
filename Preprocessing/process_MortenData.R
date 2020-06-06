@@ -1,4 +1,4 @@
-setwd("LiverSpatialCompare")
+setwd("scSpatialReconstructCompare-Paper")
 
 #########
 ## Process Morten's full-length data, needs to be normalized and also QC

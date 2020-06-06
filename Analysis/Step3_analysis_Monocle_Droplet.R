@@ -1,3 +1,5 @@
+setwd("scSpatialReconstructCompare-Paper")
+
 load("RDATA/dataReady_DropletPaper.RData")
 
 use.data <- droplet_liver_data

@@ -1,4 +1,4 @@
-setwd("LiverSpatialCompare")
+setwd("scSpatialReconstructCompare-Paper")
 
 
 load("RDATA/analysis_Monocle_Droplet.RData")
