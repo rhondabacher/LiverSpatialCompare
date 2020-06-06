@@ -36,7 +36,7 @@ install.packages("org.Mm.eg.db")
 2. To run the Shiny App, type in:
 
 ```
-runGitHub("rhondabacher/LiverSpatialCompare")
+runGitHub("rhondabacher/scSpatialReconstructCompare-Paper")
 ```
 
 ### Questions
