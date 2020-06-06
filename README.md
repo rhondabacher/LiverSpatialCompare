@@ -1,13 +1,14 @@
 
-# Scripts for the comparison of spatial reordering in the liver lobule manuscript
+# Scripts for the manuscipt comparing of spatial reordering across single-cell protocols using datasets on the liver lobule
 
 
 This repository contains 
 
-1. Code to reproduce the analyses and figures in "Tradeoff between more cells and higher read depth for single-cell RNA-seq spatial ordering analysis of the liver lobule". This includes all preprocessing steps and the generation of figures in the main text and supplement. 
+1. Code to reproduce the analyses and figures in "Reproducibility across single-cell RNA-seq protocols for spatial ordering analysise". This includes all preprocessing steps and the generation of figures in the main text and supplement. 
 
     * Full-length dataset is available at GSE116140, processed data is included as a supplement to the manuscript.
     * Download UMI dataset summary NIHMS70855-supplement-Supplementary_Table_3.xlsx and counts NIHMS70855-supplement-Supplementary_Table_1.zip from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5321580/
+    * Download 10X dataset at: https://figshare.com/articles/Robject_files_for_tissues_processed_by_Seurat/5821263
     * Run all codes in the the Preprocess folder first, then the scripts in the Analysis folder in the indicated order. Directory set-up is a main folder called LiverSpatialCompare with subfolders: DATA, RDATA, PLOTS, and OUT.
   
 2. A Shiny application exists here to interactively explore the correlations as shown in Figure 3 and Supp. Figure 2 for any KEGG category.

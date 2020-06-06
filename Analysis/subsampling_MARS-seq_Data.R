@@ -11,6 +11,7 @@ cellassign <- read_excel("DATA/nature21065-s3.xlsx", sheet=1, col_names=T, skip=
 loc.cell <- data.matrix(cellassign[,2:10])
 rownames(loc.cell) <- gsub(" ", "", c(cellassign[,1])[[1]], fixed=T)
 
+
 # Scale as mentioned in the supplement:
 halpernUMI.prop <- t(t(halpernUMI)/colSums(halpernUMI))
 loc.cell.prop <- t(t(loc.cell)/colSums(loc.cell))
@@ -24,6 +25,7 @@ layerMeans[1:4,1:3]
 
 
 #### Now we can subsample cells and recalculate means:
+
 
 rownames(layerMeans) <- gsub(" ", "", rownames(layerMeans), fixed=TRUE)
 layerMeans <- layerMeans[names(which(rowSums(layerMeans) > 0)),]
@@ -77,16 +79,22 @@ axis(2, cex.axis=2)
 axis(1, at=c(1:length(MSE)), label=as.character(c(tots)), cex.axis=2)
 useCols.Main <- pal_npg("nrc", alpha = .8)(1)
 points(unique(allTot), sapply(MSE, mean), pch="-", cex=6, col=useCols.Main)
+# abline(a = 0, b = (sapply(MSE, mean)[3] - sapply(MSE, mean)[2]), lwd = 2, col = alpha("black", .5))
 abline(h=seq(0,round(max(allMSE)+.1), by=.2), lwd=1, lty=3, col="gray80")
 dev.off()
 
 
 
-#### Now we can subsample depth and recalculate means:
 
 
-set.seed(9822)
-DS <- c(.1, .2, .3, .4, .5, .6, .7, .8, .9, 1)
+
+
+
+## Subsample reads.....
+
+
+set.seed(88777)
+DS <- c(.1, .25, .5, .75, 1)
 MSE <- list()
 for(j in 1:length(DS)) {
   TOTAL = DS[j]
@@ -106,6 +114,7 @@ for(j in 1:length(DS)) {
     simCounts <- do.call(cbind, simCounts)
     simCounts <- matrix(simCounts, nrow=nrow(halpernUMI), ncol=ncol(halpernUMI), byrow=FALSE)
     rownames(simCounts) <- rownames(halpernUMI)
+    colnames(simCounts) <- colnames(halpernUMI)
  
     # Scale as mentioned in the supplement:
     simCounts.prop <- t(t(simCounts)/colSums(simCounts))
@@ -118,7 +127,7 @@ for(j in 1:length(DS)) {
             ((1 - 0)/(max(x) - min(x)))*(x - min(x)) + 0}))
     getMeans.s[is.na(getMeans.s)] <- 0
 
-    allMSE <- c(allMSE, mean(rowSums(getMeans.h[useg, ] - getMeans.s)^2)))
+    allMSE <- c(allMSE, mean(rowSums(getMeans.h[useg, ] - getMeans.s)^2))
 
   }
   MSE[[j]] <- allMSE
@@ -144,6 +153,10 @@ axis(2, cex.axis=2)
 axis(1, at=c(1:length(MSE)), label=as.character(c(DS)), cex.axis=2)
 useCols.Main <- pal_npg("nrc", alpha = .8)(1)
 points(unique(allTot), sapply(MSE, mean), pch="-", cex=6, col=useCols.Main)
+# abline(a = 2.2, b = -1*(sapply(MSE, mean)[8] - sapply(MSE, mean)[]), lwd = 2, col = alpha("black", .5))
 abline(h=seq(0,round(max(allMSE)+.1), by=.5), lwd=1, lty=3, col="gray80");
 
 dev.off()
+
+
+mean(colSums(halpernUMI))

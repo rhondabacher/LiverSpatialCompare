@@ -126,14 +126,15 @@ done.data = data.frame(
                        pvalue = fitall.pvals[Genes],
                        'FDR adjusted pvalue' = adjusted.pvals[Genes])
 head(done.data)
-done.data$ZonationAxis <- "NotSignificant"
+done.data$ZonationAxis <- ""
 
-done.data$ZonationAxis[which(done.data$FDR.adjusted.pvalue < .05 & done.data$Slope < 0)] <- "PV"
-done.data$ZonationAxis[which(done.data$FDR.adjusted.pvalue < .05 & done.data$Slope >= 0)] <- "PP"
+done.data$ZonationAxis[which(done.data$FDR.adjusted.pvalue < .01 & done.data$Slope < 0)] <- "PV"
+done.data$ZonationAxis[which(done.data$FDR.adjusted.pvalue < .01 & done.data$Slope >= 0)] <- "PP"
 
+done.data <- done.data[order(done.data$FDR.adjusted.pvalue), ]
 
 write.csv(done.data, 
-          file="OUT/SupplementaryFile1.csv", row.names=F)
+          file="OUT/SupplementaryFile_WC-Out.csv", row.names=F)
 
 save.image("RDATA/analysis_WaveCrest_Morten.RData")
 

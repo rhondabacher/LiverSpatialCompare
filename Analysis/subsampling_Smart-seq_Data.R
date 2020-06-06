@@ -13,10 +13,9 @@ original.order <- wc.order
 orig.tocomp <- 1:length(original.order)
 names(orig.tocomp) <- original.order
 
-
 set.seed(5845)
 
-DS <- c(.1,.2,.5,.8, 1)
+DS <- c(.1,.2,.5,.8, 1, 1.5, 2)
 all.orders.sim <- list()
 for(XX in 1:length(DS)) {
   orders <- list()
@@ -52,7 +51,15 @@ for(j in 1:25){
 all.orders.sim[[XX]] <- orders
 }
 
-save.image("RDATA/subsampleMorten-Depth_correlation.RData")
+save.image("RDATA/subsampleMorten.RData")
+
+
+
+## To make plot:
+
+load("RDATA/subsampleMorten.RData")
+
+
 
 corrs <- list()
 for(j in 1:length(DS)) {
@@ -61,18 +68,21 @@ for(j in 1:length(DS)) {
     orders.comp <- 1:length(x)
     names(orders.comp) <- x
     orders.comp <- orders.comp[names(orig.tocomp)]
-    # Since order can be flipped either way:
-    COR <- pmax(cor(orig.tocomp, orders.comp), cor(orig.tocomp, rev(orders.comp)))    
+    COR <- pmax(cor(orig.tocomp, orders.comp), cor(orig.tocomp, rev(orders.comp)))
+    # COR <- pmin(sum((orig.tocomp-orders.comp)^2), sum((orig.tocomp-rev(orders.comp))^2))
+    
     return(COR)})
 }
+boxplot(corrs)
+
 
 library(ggsci)
 library("scales")
 
 useCols.Main <- pal_npg("nrc", alpha = .5)(1)
-useCols.Dots <- rep(useCols.Main, length(do.call(c,corrs)))
-allMSE <- do.call(c,corrs)
-allTot <- rep(1:length(corrs), each=length(corrs[[1]]))
+useCols.Dots <- rep(useCols.Main, length(do.call(c,corrs[1:5])))
+allMSE <- do.call(c,corrs[1:5])
+allTot <- rep(1:length(corrs[1:5]), each=length(corrs[[1]]))
 
 
 pdf("PLOTS/MSE_subSampleDepth_correlationOrdering_Morten.pdf", height=4.5, width=7)
@@ -80,23 +90,22 @@ par(mar=c(3,4,2,1))
 plot(allTot, allMSE, pch=16, col=useCols.Dots, xaxt='n', yaxt='n',
         xlab="", ylab = "", cex=.8, cex.axis=2, ylim=c(.965, 1.00))
 axis(2, cex.axis=2)
-axis(1, at=c(1:length(corrs)), label=as.character(c(DS)), cex.axis=2)
+axis(1, at=c(1:length(corrs[1:5])), label=as.character(c(DS[1:5])), cex.axis=2)
 useCols.Main <- pal_npg("nrc", alpha = .8)(1)
-points(unique(allTot), sapply(corrs, mean), pch="-", cex=6, col=useCols.Main)
+points(unique(allTot), sapply(corrs[1:5], mean), pch="-", cex=6, col=useCols.Main)
+
 abline(h=seq(0,round(max(allMSE)), by=.01), lwd=1, lty=3, col="gray80")
 dev.off()
 
 
-
-#### Subsampling depth for effect on zonation profiles--calculate MSE:
-
 data.norm.order <- data.norm[,wc.order]
-
+# Split Morten into 9 layers just like Halpern data:
 layerSplit <- split(1:ncol(data.norm.order), cut(seq_along(1:ncol(data.norm.order)), 9, labels = FALSE))
 layerSplit <- do.call(c,sapply(1:9, function(x) rep(x, length(layerSplit[[x]]))))
 layerMeans.morten <- t(apply(data.norm.order, 1, function(x) {
   return(tapply(x, layerSplit, median))
 }))
+
 
 getMeans.m <- layerMeans.morten
 getMeans.m <- t(apply(getMeans.m, 1, function(x) {
@@ -105,7 +114,7 @@ getMeans.m[is.na(getMeans.m)] <- 0
 
 set.seed(3211)
 
-DS <- c(.1,.2,.3,.4,.5,.6,.7,.8,.9, 1)
+DS <- c(.1,.25,.5, .75, 1)
 
 MSE <- list()
 for(XX in 1:length(DS)) {
@@ -125,12 +134,14 @@ useg <-  sample(rownames(layerMeans.morten), 500)
   simCounts <- do.call(cbind, simCounts)
   simCounts <- matrix(simCounts, nrow=nrow(data.norm), ncol=ncol(data.norm), byrow=FALSE)
   rownames(simCounts) <- rownames(data.norm)
-    
-  data.norm.order.sim <- simCounts[,wc.order]
-  
+ 
+    data.norm.order.sim <- simCounts[,wc.order]
+  # }
+
   layerMeans.morten.sim <- t(apply(data.norm.order.sim, 1, function(x) {
   return(tapply(x, layerSplit, median))}))
 
+  
   getMeans.s <- layerMeans.morten.sim[useg, ]
   getMeans.s <- t(apply(getMeans.s, 1, function(x) {
           ((1 - 0)/(max(x) - min(x)))*(x - min(x)) + 0}))
@@ -141,6 +152,7 @@ useg <-  sample(rownames(layerMeans.morten), 500)
 }
   MSE[[XX]] <- allMSE
 }
+  
 
 save.image("RDATA/subsampleMorten_Depth-MSE.RData")
   
@@ -168,10 +180,12 @@ abline(h=seq(0,round(max(allMSE),1), by=.1), lwd=1, lty=3, col="gray80")
 dev.off()
 
 
-
-###########################################################
-
-
+  
+  
+  
+  
+################################################################################################
+################################################################################################
 #### Subsampling number of cells for effect on zonation profiles--calculate MSE:
 
 
@@ -198,7 +212,7 @@ for(XX in 1:length(DS)) {
     
     sim.order <- b3[[1]]
     
-    layerSplit.sim <- split(1:ncol(data.norm.order.sim), cut(seq_along(1:ncol(data.norm.order.sim)), 9, labels = FALSE))
+    layerSplit.sim <- split(1:ncol(data.norm.sim), cut(seq_along(1:ncol(data.norm.sim)), 9, labels = FALSE))
     layerSplit.sim <- do.call(c,lapply(1:9, function(x) rep(x, length(layerSplit.sim[[x]]))))
 
     useg <-  sample(rownames(layerMeans.morten), 500)
@@ -231,7 +245,6 @@ for(XX in 1:length(DS)) {
   }
   MSE[[XX]] <- allMSE
 }
-
 ## Compare to totally random order MSE
 allMSE <- c()
 for(j in 1:25){
@@ -267,6 +280,7 @@ save.image("RDATA/subsampleMorten_fewerCells.RData")
 library(ggsci)
 library("scales")
 
+MSE <- MSE[1:5] # Don't plot the random cells.
 useCols.Main <- pal_npg("nrc", alpha = .5)(1)
 useCols.Dots <- rep(useCols.Main, length(do.call(c,MSE)))
 allMSE <- do.call(c,MSE)
