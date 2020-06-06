@@ -11,7 +11,7 @@ This repository contains
     * Download 10X dataset at: https://figshare.com/articles/Robject_files_for_tissues_processed_by_Seurat/5821263
     * Run all codes in the the Preprocess folder first, then the scripts in the Analysis folder in the indicated order. Directory set-up is a main folder called scSpatialReconstructCompare-Paper with subfolders: DATA, RDATA, PLOTS, and OUT.
   
-2. A Shiny application exists here to interactively explore the correlations as shown in Figure 3\4 and Supp. Figure 4 for any KEGG category.
+2. A Shiny application exists here to interactively explore the correlations as shown in Figure 4 and Supp. Figure 4 for any KEGG category.
 
 
 # Instructions to view data in Shiny app
