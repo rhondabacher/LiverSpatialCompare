@@ -4,7 +4,7 @@
 
 This repository contains 
 
-1. Code to reproduce the analyses and figures in "Reproducibility across single-cell RNA-seq protocols for spatial ordering analysise". This includes all preprocessing steps and the generation of figures in the main text and supplement. 
+1. Code to reproduce the analyses and figures in "Reproducibility across single-cell RNA-seq protocols for spatial ordering analysis". This includes all preprocessing steps and the generation of figures in the main text and supplement. 
 
     * Full-length dataset is available at GSE116140, processed data is included as a supplement to the manuscript.
     * Download UMI dataset summary NIHMS70855-supplement-Supplementary_Table_3.xlsx and counts NIHMS70855-supplement-Supplementary_Table_1.zip from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5321580/
